@@ -3,7 +3,10 @@
 function currentDate() {
   let now = new Date();
   let date = now.getDate();
-
+ 
+  
+  // Set a flag to check if the default location has been used
+  
   let days = [
     "Sunday",
     "Monday",
@@ -52,16 +55,36 @@ function currentTime() {
   newTime.innerHTML = `${hour}:${minute} ${ampm}`;
 }
 currentTime();
-
-// If The User Allow the Browser to Access the Location
+const defaultCity = "Mussoorie";
+let defaultLocationUsed = false;
 
 function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
-    alert("Geolocation is not supported by this browser.");
-  }
+  console.log("Getting Mussorie weather data...");
+  getWeatherDataByCity(defaultCity);
+  
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition(showPosition, showError);
+  // } else {
+  //   alert("Geolocation is not supported by this browser.");
+  // }
 }
+
+function getWeatherDataByCity(city) {
+  let apiKey = "b03a640e5ef6980o4da35b006t5f2942";
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+
+  fetch(apiUrl)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      displayWeather(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching weather data:", error);
+    });
+}
+
 
 function showError(error) {
   switch (error.code) {
